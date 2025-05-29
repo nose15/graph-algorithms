@@ -46,46 +46,57 @@ struct Graph {
   std::vector<AdjList> adj_list;
 };
 
-struct Paths {
-  // TODO: Define structure for path finding results
+struct Path {
+  int cost;
+  std::vector<int> path;
 };
 
-Graph prim_list(std::vector<AdjList> adj_lists) {
+Graph prim_list(const std::vector<AdjList>& adj_lists) {
   // TODO: Implement Prim for list
 }
 
-Graph prim_matrix(std::vector<std::vector<int>> adj_matrix) {
+Graph prim_matrix(const std::vector<std::vector<int>>& adj_matrix) {
   // TODO: Implement Prim for matrix
 }
 
-Graph kruskal_list(std::vector<AdjList> adj_lists) {
+Graph kruskal_list(const std::vector<AdjList>& adj_lists) {
   // TODO: Implement Kruskal for list
 }
 
-Graph kruskal_matrix(std::vector<std::vector<int>> adj_matrix) {
+Graph kruskal_matrix(const std::vector<std::vector<int>>& adj_matrix) {
   // TODO: Implement Kruskal for matrix
 }
 
-Paths dijkstra_list(std::vector<AdjList> adj_lists, int starting_vertex) {
+std::vector<Path> dijkstra_list(const std::vector<AdjList>& adj_lists, int starting_vertex) {
   // TODO: Implement Dijkstra's for list
 }
 
-Paths dijkstra_matrix(std::vector<std::vector<int>> adj_matrix, int starting_vertex) {
+std::vector<Path> dijkstra_matrix(const std::vector<std::vector<int>>& adj_matrix, int starting_vertex) {
   // TODO: Implement Dijkstra's for matrix
 }
 
-Paths bellman_ford_list(std::vector<AdjList> adj_lists, int starting_vertex) {
+std::vector<Path> bellman_ford_list(const std::vector<AdjList>& adj_lists, int starting_vertex) {
   // TODO: Implement Bellman-Ford for list
 }
 
-Paths bellman_ford_matrix(std::vector<std::vector<int>> adj_matrix, int starting_vertex) {
+std::vector<Path> bellman_ford_matrix(const std::vector<std::vector<int>>& adj_matrix, int starting_vertex) {
   // TODO: Implement Bellman-Ford for matrix
+}
+
+void display_mst_results(const Graph& mst_res) {
+  // a) w przypadku MST wyświetlić listę krawędzi drzewa rozpinającego z wagami oraz sumaryczną
+  // wartość
+}
+
+void display_path_finding_results(const std::vector<Path>& path_res) {
+  // b) dla problemu najkrótszej drogi dla każdego wierzchołka wyświetlić wartość (koszt) drogi oraz
+  // drogę w postaci ciągu wierzchołków o wierzchołka startowego do każdego pozostałego
 }
 
 void run_bellman_ford(std::shared_ptr<Graph> graph, int starting_vertex) {
   printf("Running Bellman Ford for starting vertex %d\n", starting_vertex);
 
-  Paths paths;
+  std::vector<Path> paths;
 
   printf("Adjacency matrix:\n");
   // TODO: Start time measure
@@ -103,7 +114,7 @@ void run_bellman_ford(std::shared_ptr<Graph> graph, int starting_vertex) {
 void run_dijkstra(std::shared_ptr<Graph> graph, int starting_vertex) {
   printf("Running Dijkstra for starting vertex %d\n", starting_vertex);
 
-  Paths paths;
+  std::vector<Path> paths;
 
   printf("Adjacency matrix:\n");
   // TODO: Start time measure
