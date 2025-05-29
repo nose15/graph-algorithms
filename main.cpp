@@ -53,42 +53,50 @@ struct Path {
 
 Graph prim_list(const std::vector<AdjList>& adj_lists) {
   // TODO: Implement Prim for list
+  return {};
 }
 
 Graph prim_matrix(const std::vector<std::vector<int>>& adj_matrix) {
   // TODO: Implement Prim for matrix
+  return {};
 }
 
 Graph kruskal_list(const std::vector<AdjList>& adj_lists) {
   // TODO: Implement Kruskal for list
+  return {};
 }
 
 Graph kruskal_matrix(const std::vector<std::vector<int>>& adj_matrix) {
   // TODO: Implement Kruskal for matrix
+  return {};
 }
 
 std::vector<Path> dijkstra_list(const std::vector<AdjList>& adj_lists, int starting_vertex) {
   // TODO: Implement Dijkstra's for list
+  return {};
 }
 
 std::vector<Path> dijkstra_matrix(const std::vector<std::vector<int>>& adj_matrix, int starting_vertex) {
   // TODO: Implement Dijkstra's for matrix
+  return {};
 }
 
 std::vector<Path> bellman_ford_list(const std::vector<AdjList>& adj_lists, int starting_vertex) {
   // TODO: Implement Bellman-Ford for list
+  return {};
 }
 
 std::vector<Path> bellman_ford_matrix(const std::vector<std::vector<int>>& adj_matrix, int starting_vertex) {
   // TODO: Implement Bellman-Ford for matrix
+  return {};
 }
 
-void display_mst_results(const Graph& mst_res) {
+void display_mst_results(const Graph& mst_res, double time_) {
   // a) w przypadku MST wyświetlić listę krawędzi drzewa rozpinającego z wagami oraz sumaryczną
   // wartość
 }
 
-void display_path_finding_results(const std::vector<Path>& path_res) {
+void display_path_finding_results(const std::vector<Path>& path_res, double time_) {
   // b) dla problemu najkrótszej drogi dla każdego wierzchołka wyświetlić wartość (koszt) drogi oraz
   // drogę w postaci ciągu wierzchołków o wierzchołka startowego do każdego pozostałego
 }
@@ -99,16 +107,18 @@ void run_bellman_ford(std::shared_ptr<Graph> graph, int starting_vertex) {
   std::vector<Path> paths;
 
   printf("Adjacency matrix:\n");
-  // TODO: Start time measure
+  auto start_matrix = std::chrono::high_resolution_clock::now();
   paths = bellman_ford_matrix(graph->adj_matrix, starting_vertex);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_matrix = std::chrono::high_resolution_clock::now();
+  auto duration_matrix = end_matrix - start_matrix;
+  display_path_finding_results(paths, duration_matrix.count());
 
   printf("Adjacency list:\n");
-  // TODO: Start time measure
+  auto start_list = std::chrono::high_resolution_clock::now();
   paths = bellman_ford_list(graph->adj_list, starting_vertex);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_list = std::chrono::high_resolution_clock::now();
+  auto duration_list = end_list - start_list;
+  display_path_finding_results(paths, duration_list.count());
 }
 
 void run_dijkstra(std::shared_ptr<Graph> graph, int starting_vertex) {
@@ -117,16 +127,18 @@ void run_dijkstra(std::shared_ptr<Graph> graph, int starting_vertex) {
   std::vector<Path> paths;
 
   printf("Adjacency matrix:\n");
-  // TODO: Start time measure
+  auto start_matrix = std::chrono::high_resolution_clock::now();
   paths = dijkstra_matrix(graph->adj_matrix, starting_vertex);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_matrix = std::chrono::high_resolution_clock::now();
+  auto duration_matrix = end_matrix - start_matrix;
+  display_path_finding_results(paths, duration_matrix.count());
 
   printf("Adjacency list:\n");
-  // TODO: Start time measure
+  auto start_list = std::chrono::high_resolution_clock::now();
   paths = dijkstra_list(graph->adj_list, starting_vertex);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_list = std::chrono::high_resolution_clock::now();
+  auto duration_list = end_list - start_list;
+  display_path_finding_results(paths, duration_list.count());
 }
 
 void run_kruskal(std::shared_ptr<Graph> graph) {
@@ -135,16 +147,18 @@ void run_kruskal(std::shared_ptr<Graph> graph) {
   Graph mst;
 
   printf("Adjacency matrix:\n");
-  // TODO: Start time measure
+  auto start_matrix = std::chrono::high_resolution_clock::now();
   mst = kruskal_matrix(graph->adj_matrix);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_matrix = std::chrono::high_resolution_clock::now();
+  auto duration_matrix = end_matrix - start_matrix;
+  display_mst_results(mst, duration_matrix.count());
 
   printf("Adjacency list:\n");
-  // TODO: Start time measure
+  auto start_list = std::chrono::high_resolution_clock::now();
   mst = kruskal_list(graph->adj_list);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_list = std::chrono::high_resolution_clock::now();
+  auto duration_list = end_list - start_list;
+  display_mst_results(mst, duration_list.count());
 }
 
 void run_prim(std::shared_ptr<Graph> graph) {
@@ -153,16 +167,18 @@ void run_prim(std::shared_ptr<Graph> graph) {
   Graph mst;
 
   printf("Adjacency matrix:\n");
-  // TODO: Start time measure
+  auto start_matrix = std::chrono::high_resolution_clock::now();
   mst = prim_matrix(graph->adj_matrix);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_matrix = std::chrono::high_resolution_clock::now();
+  auto duration_matrix = end_matrix - start_matrix;
+  display_mst_results(mst, duration_matrix.count());
 
   printf("Adjacency list:\n");
-  // TODO: Start time measure
+  auto start_list = std::chrono::high_resolution_clock::now();
   mst = prim_list(graph->adj_list);
-  // TODO: Stop time measure
-  // TODO: Display time and results
+  auto end_list = std::chrono::high_resolution_clock::now();
+  auto duration_list = end_list - start_list;
+  display_mst_results(mst, duration_list.count());
 }
 
 void display_graph(std::shared_ptr<Graph> graph) {
@@ -190,12 +206,12 @@ std::string file_path_dialog() {
   return file_path;
 }
 
-Graph generate_graph(int vertex_count, int density) {
+std::shared_ptr<Graph> generate_graph(int vertex_count, int density) {
   printf("Generating graph\n");
 
   // TODO: Implement graph generation
 
-  return Graph();
+  return std::make_shared<Graph>();
 }
 
 int read_path_from_file(std::shared_ptr<Graph>& graph, const std::string& file_path) {
@@ -214,7 +230,7 @@ void read_mst_from_file(std::shared_ptr<Graph>& graph, const std::string& file_p
   // TODO: Implement graph construction from file
 }
 
-int path_gen_dialog(std::shared_ptr<Graph> graph) {
+int path_gen_dialog(std::shared_ptr<Graph>& graph) {
   int vertex_count = -1;
   int density = -1;
   int starting_vertex = -1;
@@ -252,7 +268,7 @@ int path_gen_dialog(std::shared_ptr<Graph> graph) {
     printf("Niepoprawny wierzcholek startowy - powinien byc z przedzialu <0;%d>\n", vertex_count - 1);
   }
 
-  *graph = generate_graph(vertex_count, density);
+  graph = generate_graph(vertex_count, density);
   return starting_vertex;
 }
 
@@ -262,7 +278,7 @@ int path_file_dialog(std::shared_ptr<Graph>& graph) {
   return starting_vertex;
 }
 
-void mst_gen_dialog(std::shared_ptr<Graph> graph) {
+void mst_gen_dialog(std::shared_ptr<Graph>& graph) {
   int vertex_count = -1;
   int density = -1;
 
@@ -289,7 +305,7 @@ void mst_gen_dialog(std::shared_ptr<Graph> graph) {
     printf("Niepoprawna gestosc - powinna byc z przedzialu <0;100>\n");
   }
 
-  *graph = generate_graph(vertex_count, density);
+  graph = generate_graph(vertex_count, density);
 }
 
 void mst_file_dialog(std::shared_ptr<Graph>& graph) {
