@@ -47,23 +47,23 @@ struct Graph {
 };
 
 struct Paths {
-
+  // TODO: Define structure for path finding results
 };
 
 Graph prim_list(std::vector<AdjList> adj_lists) {
-
+  // TODO: Implement Prim for list
 }
 
 Graph prim_matrix(std::vector<std::vector<int>> adj_matrix) {
-
+  // TODO: Implement Prim for matrix
 }
 
 Graph kruskal_list(std::vector<AdjList> adj_lists) {
-
+  // TODO: Implement Kruskal for list
 }
 
 Graph kruskal_matrix(std::vector<std::vector<int>> adj_matrix) {
-
+  // TODO: Implement Kruskal for matrix
 }
 
 Paths dijkstra_list(std::vector<AdjList> adj_lists, int starting_vertex) {
@@ -118,36 +118,43 @@ void run_dijkstra(std::shared_ptr<Graph> graph, int starting_vertex) {
   // TODO: Display time and results
 }
 
-void run_kruskal(std::weak_ptr<Graph> graph) {
+void run_kruskal(std::shared_ptr<Graph> graph) {
   printf("Running Kruskal\n");
 
-  Paths paths;
+  Graph mst;
 
   printf("Adjacency matrix:\n");
   // TODO: Start time measure
-  paths = kruskal_matrix(graph->adj_matrix, starting_vertex);
+  mst = kruskal_matrix(graph->adj_matrix);
   // TODO: Stop time measure
   // TODO: Display time and results
 
   printf("Adjacency list:\n");
   // TODO: Start time measure
-  paths = kruskal_list(graph->adj_list, starting_vertex);
+  mst = kruskal_list(graph->adj_list);
   // TODO: Stop time measure
   // TODO: Display time and results
-  // TODO: Implement Kruskal for list and for matrix in separate functions
-  // TODO: Measure times for both methods
-  // TODO: Display times and results
 }
 
-void run_prim(std::weak_ptr<Graph> graph) {
+void run_prim(std::shared_ptr<Graph> graph) {
   printf("Running Prim\n");
 
-  // TODO: Implement Prim for list and for matrix in separate functions
-  // TODO: Measure times for both methods
-  // TODO: Display times and results
+  Graph mst;
+
+  printf("Adjacency matrix:\n");
+  // TODO: Start time measure
+  mst = prim_matrix(graph->adj_matrix);
+  // TODO: Stop time measure
+  // TODO: Display time and results
+
+  printf("Adjacency list:\n");
+  // TODO: Start time measure
+  mst = prim_list(graph->adj_list);
+  // TODO: Stop time measure
+  // TODO: Display time and results
 }
 
-void display_graph(std::weak_ptr<Graph> graph) {
+void display_graph(std::shared_ptr<Graph> graph) {
   printf("Displaying graph\n");
 
   // TODO: Implement graph display for each method
