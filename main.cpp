@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <vector>
 #include <list>
+#include <fstream>
+#include <iostream>
 
 struct Edge {
   int target;
@@ -13,22 +15,30 @@ struct Edge {
 class AdjList {
  private:
   std::list<Edge> * adj_list;
+  int size;
  public:
   AdjList() {
+    size = 0;
     adj_list = new std::list<Edge>();
   }
   ~AdjList() {
+    adj_list->clear();
     delete adj_list;
+  }
+
+  int get_size() const {
+    return size;
   }
 
   void add(int target, int weight) {
     adj_list->push_back({target, weight});
+    size++;
   }
 
-  std::list<Edge>::iterator get(int index) {
+  Edge get(int index) {
     for (auto it = adj_list->begin(); it != adj_list->end(); it++) {
       if (index == 0) {
-        return it;
+        return {it->target, it->weight};
       }
 
       index--;
@@ -39,11 +49,16 @@ class AdjList {
 };
 
 struct Graph {
-  std::vector<std::vector<int>> adj_matrix;
+  Graph() {
+    adj_matrix = new std::vector<std::vector<int>>();
+    adj_list = new std::vector<AdjList>();
+  }
+
+  std::vector<std::vector<int>> * adj_matrix;
 
   // each vertex has a list that stores its edges
   // each edge is made out of target vertex and weight
-  std::vector<AdjList> adj_list;
+  std::vector<AdjList> * adj_list;
 };
 
 struct Path {
@@ -51,42 +66,42 @@ struct Path {
   std::vector<int> path;
 };
 
-Graph prim_list(const std::vector<AdjList>& adj_lists) {
+Graph prim_list(const std::vector<AdjList>* adj_lists) {
   // TODO: Implement Prim for list
   return {};
 }
 
-Graph prim_matrix(const std::vector<std::vector<int>>& adj_matrix) {
+Graph prim_matrix(const std::vector<std::vector<int>>* adj_matrix) {
   // TODO: Implement Prim for matrix
   return {};
 }
 
-Graph kruskal_list(const std::vector<AdjList>& adj_lists) {
+Graph kruskal_list(const std::vector<AdjList>* adj_lists) {
   // TODO: Implement Kruskal for list
   return {};
 }
 
-Graph kruskal_matrix(const std::vector<std::vector<int>>& adj_matrix) {
+Graph kruskal_matrix(const std::vector<std::vector<int>>* adj_matrix) {
   // TODO: Implement Kruskal for matrix
   return {};
 }
 
-std::vector<Path> dijkstra_list(const std::vector<AdjList>& adj_lists, int starting_vertex) {
+std::vector<Path> dijkstra_list(const std::vector<AdjList>* adj_lists, int starting_vertex) {
   // TODO: Implement Dijkstra's for list
   return {};
 }
 
-std::vector<Path> dijkstra_matrix(const std::vector<std::vector<int>>& adj_matrix, int starting_vertex) {
+std::vector<Path> dijkstra_matrix(const std::vector<std::vector<int>>* adj_matrix, int starting_vertex) {
   // TODO: Implement Dijkstra's for matrix
   return {};
 }
 
-std::vector<Path> bellman_ford_list(const std::vector<AdjList>& adj_lists, int starting_vertex) {
+std::vector<Path> bellman_ford_list(const std::vector<AdjList>* adj_lists, int starting_vertex) {
   // TODO: Implement Bellman-Ford for list
   return {};
 }
 
-std::vector<Path> bellman_ford_matrix(const std::vector<std::vector<int>>& adj_matrix, int starting_vertex) {
+std::vector<Path> bellman_ford_matrix(const std::vector<std::vector<int>>* adj_matrix, int starting_vertex) {
   // TODO: Implement Bellman-Ford for matrix
   return {};
 }
@@ -182,9 +197,32 @@ void run_prim(std::shared_ptr<Graph> graph) {
 }
 
 void display_graph(std::shared_ptr<Graph> graph) {
-  printf("Displaying graph\n");
+  printf("Wyświetlanie grafu\nLista sąsiedztwa:\n");
 
-  // TODO: Implement graph display for each method
+  for (int i = 0; i < graph->adj_list->size(); i++) {
+    printf("%d: ", i);
+    auto adj_list = graph->adj_list->at(i);
+
+    for (int j = 0; j < adj_list.get_size(); j++) {
+      auto edge = adj_list.get(j);
+      printf("(%d, %d)", edge.target, edge.weight);
+
+      if (j != adj_list.get_size() - 1) {
+        printf(" -> ");
+      } else {
+        printf(";\n");
+      }
+    }
+  }
+
+  printf("Macierz sąsiedztwa:\n");
+
+  for (int i = 0; i < graph->adj_matrix->size(); i++) {
+    for (int j = 0; j < graph->adj_matrix->at(i).size(); j++) {
+      printf("%d ", graph->adj_matrix->at(i)[j]);
+    }
+    printf("\n");
+  }
 }
 
 std::string file_path_dialog() {
@@ -215,20 +253,73 @@ std::shared_ptr<Graph> generate_graph(int vertex_count, int density) {
 }
 
 int read_path_from_file(std::shared_ptr<Graph>& graph, const std::string& file_path) {
+  std::ifstream file(file_path);
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file: " << file_path << std::endl;
+    return -1;
+  }
+
+  int edge_count, vertex_count, starting_vertex;
+  file >> edge_count >> vertex_count >> starting_vertex;
+
+  // Initialize graph
   graph = std::make_shared<Graph>();
-  printf("Reading path graph from file %s\n", file_path.c_str());
 
-  // TODO: Implement graph construction from file and reading the starting vertex
+  // Resize both data structures
+  graph->adj_list->resize(vertex_count);
+  graph->adj_matrix->resize(vertex_count, std::vector<int>(vertex_count, 0));
 
-  return 1;
+  for (int i = 0; i < edge_count; ++i) {
+    int src, dest, weight;
+    file >> src >> dest >> weight;
+
+    // Update adjacency list (undirected)
+    graph->adj_list->at(src).add(dest, weight);
+    graph->adj_list->at(dest).add(src, weight);
+
+    // Update adjacency matrix (undirected)
+    graph->adj_matrix->at(src)[dest] = weight;
+    graph->adj_matrix->at(dest)[src] = weight;
+  }
+
+  file.close();
+
+  return starting_vertex;
 }
 
 void read_mst_from_file(std::shared_ptr<Graph>& graph, const std::string& file_path) {
-  graph = std::make_shared<Graph>();
-  printf("Reading mst graph from file %s\n", file_path.c_str());
+  std::ifstream file(file_path);
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file: " << file_path << std::endl;
+    return;
+  }
 
-  // TODO: Implement graph construction from file
+  int edge_count, vertex_count;
+  file >> edge_count >> vertex_count;
+
+  // Initialize graph
+  graph = std::make_shared<Graph>();
+
+  // Resize both data structures
+  graph->adj_list->resize(vertex_count);
+  graph->adj_matrix->resize(vertex_count, std::vector<int>(vertex_count, 0));
+
+  for (int i = 0; i < edge_count; ++i) {
+    int src, dest, weight;
+    file >> src >> dest >> weight;
+
+    // Update adjacency list (undirected)
+    graph->adj_list->at(src).add(dest, weight);
+    graph->adj_list->at(dest).add(src, weight);
+
+    // Update adjacency matrix (undirected)
+    graph->adj_matrix->at(src)[dest] = weight;
+    graph->adj_matrix->at(dest)[src] = weight;
+  }
+
+  file.close();
 }
+
 
 int path_gen_dialog(std::shared_ptr<Graph>& graph) {
   int vertex_count = -1;
